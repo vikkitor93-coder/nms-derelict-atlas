@@ -1,0 +1,10 @@
+# nms-derelict-atlas format 1: region 04E84EFD galaxy 0
+# region_systems 587 (portal-valid 001-24A); scanned 001-242; edge systems above 242 left out on purpose
+# generator fastgen app 1.1.0 / server 1.3.0; NMS.exe 7.05 SHA-256 13D5060D4EFB9D2A6A6B1B349BC4257231056CC2A055DF4BB15D816262CC3499; 2026-10-20T16:48:27Z
+# inputs 3511d24540a605e6347e15a6358e7ca54ff4dfdc9dc967e9531924158d04cac3
+# status partial: 2 of 578 systems so far; the scanner completes this region
+# verified 2026-10-20T16:48:27Z by Vikman-PC: all 2 systems generated on this machine (maintainer scan)
+glyphs,preset,rooms,crates,footlockers,floors,stairs,hangars,room_detail,check
+001A04E84EFD,MEDI_BUGS,10,11,5,2,4,0,R_S_MEDI:1/1|B_BUG_MED:0/0|R_BUG_MEDI:2/0|R_S_BUG_MEDI:0/0|R_S_BUG_BARR:1/1|R_BUG_BARR:1/0|B_BUG_BARR:1/0|R_BUG_MEDI:4/2|B_BUG_BARR:0/0|R_END:1/1,245773bc2683d676
+01BF04E84EFD,CARGO_FLOATERS,11,30,13,4,3,0,R_S_FLO_CARG:0/0|R_S_FLO_BARR:0/2|R_FLO_CARG:7/3|B_FLO_CARG:1/0|R_FLO_CARG:7/1|B_FLO_CARG:0/0|R_FLO_CARG:9/1|B_FLO_CARG:3/0|R_FLO_BARR:2/6|B_FLO_CARG:1/0|R_END:0/0,8e6f79b36262a0fd
+# not generated: 001-019 01B-1BE 1C0-242
