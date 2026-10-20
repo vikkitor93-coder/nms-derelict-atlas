@@ -27,12 +27,14 @@ A file with a `# status partial` header line is an unfinished region: the rows i
 and the `# not generated` line lists the systems still missing. Scanners take partial regions first and
 replace the file with the complete region when it's done.
 
-## Crate locations (top 1%)
+## Crate locations (top 100)
 
-For systems in the top 1% by total containers (salvage crates + footlockers), `locations/g<galaxy>/<YY>/<ZZZ>/<REGION>/<glyphs>.json`
-lists every crate and footlocker position per room. Positions are in layout space, in metres, relative to
-the derelict's entrance grid origin. The threshold is recalculated as more regions are scanned, and
-systems that later qualify get their locations added.
+The 100 best systems by total containers (salvage crates + footlockers; ties go to more crates, then the
+lower glyph code) each have `locations/g<galaxy>/<YY>/<ZZZ>/<REGION>/<glyphs>.json`, listing every crate and
+footlocker position per room. Positions are in layout space, in metres, relative to the derelict's entrance
+grid origin. When a newly scanned system beats one of them, the new one gets a file and the system it pushed
+out of the top 100 has its file deleted (it's still in git history). Every other system has its summary and
+per-room counts in the region files.
 
 ## Authenticity
 
