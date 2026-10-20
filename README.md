@@ -23,6 +23,10 @@ Hex digit to glyph: 0 sunset, 1 bird, 2 face, 3 diplo, 4 eclipse, 5 balloon, 6 b
 Only systems sure to exist are listed. The game's own region star count gives the valid range; the last 8
 systems below that edge are left out unless a visit confirmed them (see each file's header).
 
+A file with a `# status partial` header line is an unfinished region: the rows it has are real and verified,
+and the `# not generated` line lists the systems still missing. Scanners take partial regions first and
+replace the file with the complete region when it's done.
+
 ## Crate locations (top 1%)
 
 For systems in the top 1% by salvage crates, `locations/g<galaxy>/<YY>/<ZZZ>/<REGION>/<glyphs>.json`
