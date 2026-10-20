@@ -27,14 +27,18 @@ A file with a `# status partial` header line is an unfinished region: the rows i
 and the `# not generated` line lists the systems still missing. Scanners take partial regions first and
 replace the file with the complete region when it's done.
 
-## Crate locations (top 100)
+## Index and top-100 maps
 
-The 100 best systems by total containers (salvage crates + footlockers; ties go to more crates, then the
-lower glyph code) each have `locations/g<galaxy>/<YY>/<ZZZ>/<REGION>/<glyphs>.json`, listing every crate and
-footlocker position per room. Positions are in layout space, in metres, relative to the derelict's entrance
-grid origin. When a newly scanned system beats one of them, the new one gets a file and the system it pushed
-out of the top 100 has its file deleted (it's still in git history). Every other system has its summary and
-per-room counts in the region files.
+- `index/systems.csv.gz`: every published system in one gzip CSV (glyphs, galaxy, preset, rooms, crates,
+  footlockers, floors, stairs, hangars, map). It's a convenience copy built from `regions/`, which stay the
+  verified source.
+- `views/top100.json.gz`: full maps of the 100 best systems by total containers (salvage crates + footlockers;
+  ties go to more crates, then the lower glyph code). It holds rooms, placed pieces, and every crate and
+  footlocker with its room and position (layout space, centimetres). Systems with `map` = 1 in the index are in
+  it. When a newly scanned system beats one of the 100, the bundle is rebuilt without the system it pushed out.
+
+Both files are rebuilt and committed together with every region upload. They're deterministic, so an unchanged
+file isn't rewritten.
 
 ## Authenticity
 
