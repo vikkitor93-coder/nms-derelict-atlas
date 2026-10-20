@@ -29,7 +29,7 @@ replace the file with the complete region when it's done.
 
 ## Crate locations (top 1%)
 
-For systems in the top 1% by salvage crates, `locations/g<galaxy>/<YY>/<ZZZ>/<REGION>/<glyphs>.json`
+For systems in the top 1% by total containers (salvage crates + footlockers), `locations/g<galaxy>/<YY>/<ZZZ>/<REGION>/<glyphs>.json`
 lists every crate and footlocker position per room. Positions are in layout space, in metres, relative to
 the derelict's entrance grid origin. The threshold is recalculated as more regions are scanned, and
 systems that later qualify get their locations added.
