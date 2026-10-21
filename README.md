@@ -5,7 +5,7 @@ by running the game's own layout code. It covers rooms, salvage crates and footl
 
 ## Using it
 
-Every scanned region has one file: `regions/g<galaxy>/<YY>/<ZZZ>/<REGION>.csv`. REGION is the last 8
+Every scanned region has one file (header `# nms-derelict-atlas format 1` or `2`; format 2 adds `briefcases` and `tall_lockers` after `hangars`): `regions/g<galaxy>/<YY>/<ZZZ>/<REGION>.csv`. REGION is the last 8
 portal-glyph digits (YY ZZZ XXX). Each row is one star system:
 
 | column | meaning |
@@ -14,6 +14,7 @@ portal-glyph digits (YY ZZZ XXX). Each row is one star system:
 | `preset` | derelict type, for example CARGO_FLOATERS or MEDI_BUGS |
 | `rooms`, `crates`, `footlockers` | room count, salvage crates and crew footlockers |
 | `floors`, `stairs`, `hangars` | levels used, staircase pieces and hangar pieces |
+| `briefcases`, `tall_lockers` | the two other lootable props (format 2 files only; empty = not counted yet). Filled for every system scanned from 2026-10-21 and for all systems with 60+ crates + footlockers |
 | `room_detail` | per room in the generator's order: `TEMPLATE:crates/footlockers`, joined with `|` |
 | `check` | row fingerprint: the first 16 hex digits of SHA-256(`inputs` fingerprint + `|` + row) |
 
