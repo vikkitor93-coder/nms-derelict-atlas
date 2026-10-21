@@ -1,8 +1,8 @@
 # nms-derelict-atlas format 3: region 07605CAB galaxy 0
 # region_systems 550 (portal-valid 001-225); scanned 001-21D; edge systems above 21D left out on purpose
-# generator fastgen reward-cache-import; NMS.exe 7.05 SHA-256 13D5060D4EFB9D2A6A6B1B349BC4257231056CC2A055DF4BB15D816262CC3499; 2026-10-21T09:29:32Z
+# generator fastgen reward-cache-import; NMS.exe 7.05 SHA-256 13D5060D4EFB9D2A6A6B1B349BC4257231056CC2A055DF4BB15D816262CC3499; 2026-10-21T09:33:58Z
 # inputs 99f9229699487135dcc1a20c95305641eff6c74adbcaa3d5469facca830da88e
-# verified 2026-10-21T09:29:32Z by Vikman-PC: all 541 systems generated on this machine (maintainer scan)
+# verified 2026-10-21T09:33:58Z by Vikman-PC: all 541 systems generated on this machine (maintainer scan)
 glyphs,preset,rooms,crates,footlockers,floors,stairs,hangars,briefcases,tall_lockers,reward_name,reward_class,reward_ambiguous,reward_alt,room_detail,check
 000107605CAB,MEDI_SLIME,10,10,0,1,0,0,,,Salvaged Hyperdrive Upgrade,C,0,,R_S_SLI_MEDI:0/0|B_SLI_MEDI:0/0|R_S_SLI_MEDI:1/0|R_S_SLI_MEDI:1/0|R_SLI_BARR:1/0|B_SLI_MEDI:0/0|R_SLI_MEDI:1/0|B_SLI_MEDI:1/0|R_S_SLI_BARR:0/0|R_END:5/0,c55b622d7b9d97a4
 000207605CAB,CARGO_BUGS,11,13,12,2,2,0,,,Salvaged Fleet Fuel Unit,C,0,,R_S_CARG:1/2|B_BUG_CARG:0/0|R_BUG_BARR:0/3|B_BUG_BARR:0/0|R_BUG_CARG:3/1|B_BUG_CARG:3/0|R_S_BUG_CARG:2/0|R_S_BUG_CARG:2/2|B_BUG_BARR:0/0|R_S_BUG_BARR:0/1|R_END:2/3,49aa27f213318610
@@ -544,4 +544,4 @@ glyphs,preset,rooms,crates,footlockers,floors,stairs,hangars,briefcases,tall_loc
 021A07605CAB,MEDI_BUGS,11,6,5,3,2,0,,,Salvaged Fleet Combat Unit,C,0,,R_S_MEDI:1/0|B_BUG_MED:0/0|R_BUG_MEDI:1/1|B_BUG_BARR:0/0|R_BUG_BARR:0/1|B_BUG_BARR:1/0|R_S_BUG_MEDI:0/0|R_BUG_MEDI:1/1|B_BUG_MED:0/0|R_S_BUG_BARR:0/2|R_END:2/0,9410221364f49e87
 021B07605CAB,CARGO_TURRETS,9,20,8,3,2,3,,,Salvaged Fleet Mining Unit,B,0,,R_S_CARG:3/0|R_HANG:0/0|R_CARG:10/2|B_CARG:0/0|R_S_BARR:1/2|R_BARR:0/4|B_CARG:1/0|R_S_CARG:3/0|R_END:2/0,4709dd3b923c739e
 021C07605CAB,MEDI_BUGS,9,5,5,1,0,0,,,Salvaged Fleet Exploration Unit,B,0,,R_S_MEDI:3/1|B_BUG_MED:1/0|R_S_BUG_MEDI:0/0|R_BUG_BARR:0/3|B_BUG_BARR:1/1|R_S_BUG_BARR:0/0|R_S_BUG_MEDI:0/0|R_BUG_MEDI:0/0|R_END:0/0,27c987a50f7e68d3
-021D07605CAB,CARGO_BUGS,13,26,7,4,3,0,,,,,,,R_S_CARG:1/0|B_BUG_BARR:1/0|R_S_BUG_BARR:1/0|B_BUG_BARR:0/0|R_BUG_BARR:0/2|B_BUG_BARR:0/0|R_BUG_CARG:8/0|B_BUG_CARG:0/0|R_BUG_CARG:3/1|B_BUG_BARR:0/0|R_BUG_CARG:11/3|B_BUG_CARG:0/0|R_END:1/1,fb78e0f74e49d9eb
+021D07605CAB,CARGO_BUGS,13,26,7,4,3,0,,,Salvaged Fleet Combat Unit,B,0,,R_S_CARG:1/0|B_BUG_BARR:1/0|R_S_BUG_BARR:1/0|B_BUG_BARR:0/0|R_BUG_BARR:0/2|B_BUG_BARR:0/0|R_BUG_CARG:8/0|B_BUG_CARG:0/0|R_BUG_CARG:3/1|B_BUG_BARR:0/0|R_BUG_CARG:11/3|B_BUG_CARG:0/0|R_END:1/1,9d7902e6571c594a
