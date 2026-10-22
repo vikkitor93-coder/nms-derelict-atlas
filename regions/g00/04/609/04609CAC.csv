@@ -1,9 +1,9 @@
 # nms-derelict-atlas format 4: region 04609CAC galaxy 0
 # region_systems 552 (portal-valid 001-227); scanned 001-21F; edge systems above 21F left out on purpose
-# generator fastgen server 1.8.0 (2026-10-20); NMS.exe 7.05 SHA-256 13D5060D4EFB9D2A6A6B1B349BC4257231056CC2A055DF4BB15D816262CC3499; 2026-10-22T01:28:51Z
+# generator fastgen server 1.8.0 (2026-10-20); NMS.exe 7.05 SHA-256 13D5060D4EFB9D2A6A6B1B349BC4257231056CC2A055DF4BB15D816262CC3499; 2026-10-22T02:20:02Z
 # inputs b93f4648ae1ce158c39d3306ed0eca28e7ffc3046e802470a27458b5b65b8fca
-# status partial: 481 of 543 systems so far; the scanner completes this region
-# verified 2026-10-22T01:28:51Z by Vikman-PC: all 481 systems generated on this machine (maintainer scan)
+# status partial: 491 of 543 systems so far; the scanner completes this region
+# verified 2026-10-22T02:20:02Z by Vikman-PC: all 491 systems generated on this machine (maintainer scan)
 glyphs,preset,rooms,crates,footlockers,floors,stairs,hangars,briefcases,tall_lockers,reward_name,reward_class,reward_ambiguous,reward_alt,frigate_modules,frigate_modules_ambiguous,frigate_module_rooms,frigate_module_ids,frigate_module_alt_ids,room_detail,check
 000104609CAC,CARGO_BUGS,11,25,3,3,4,0,21,20,Salvaged Fleet Combat Unit,A,0,,,,,,,R_S_CARG:7/0|B_BUG_BARR:0/0|R_BUG_BARR:1/1|B_BUG_BARR:1/0|R_BUG_CARG:7/1|B_BUG_CARG:2/0|R_S_BUG_BARR:0/0|R_S_BUG_CARG:5/0|R_BUG_CARG:2/1|B_BUG_BARR:0/0|R_END:0/0,51ba087cbdde54af
 000204609CAC,MEDI_TURRETS,8,10,5,2,1,2,14,22,Salvaged Fleet Fuel Unit,B,0,,,,,,,R_BARR:0/1|R_S_BARR:2/3|R_MEDI:3/0|R_MEDI:4/0|B_MEDI:0/0|R_S_MEDI:1/0|R_HANG:0/1|R_END:0/0,bbc38c7b74a9a351
@@ -486,4 +486,14 @@ glyphs,preset,rooms,crates,footlockers,floors,stairs,hangars,briefcases,tall_loc
 01DF04609CAC,CARGO_TURRETS,7,22,8,4,3,3,17,22,Salvaged Fleet Combat Unit,S,0,,,,,,,R_HANG:0/0|R_CARG:9/1|R_S_BARR:0/1|R_S_CARG:5/2|R_BARR:0/2|R_S_CARG:7/1|R_END:1/1,6c9988c80d03fb2e
 01E004609CAC,MEDI_BUGS,9,7,6,3,2,0,27,22,Salvaged Fleet Exploration Unit,B,1,Salvaged Fleet Mining Unit B,,,,,,R_S_MEDI:3/0|B_BUG_MED:0/0|R_S_BUG_MEDI:0/1|R_S_BUG_MEDI:0/0|B_BUG_BARR:2/0|R_S_BUG_BARR:0/1|R_BUG_MEDI:1/1|R_BUG_BARR:0/3|R_END:1/0,31d2c14b8c9a35e0
 01E104609CAC,MEDI_FLOATERS,10,10,11,3,2,0,10,33,Salvaged Fleet Exploration Unit,B,0,,,,,,,R_FLO_MEDI:0/0|R_FLO_MEDI:6/0|B_FLO_MEDI:0/0|R_S_FLO_BARR:0/1|R_FLO_BARR:1/9|B_FLO_MEDI:0/0|R_S_FLO_MEDI:1/0|B_FLO_MEDI:0/0|R_S_FLO_MEDI:2/1|R_END:0/0,a0a0a648fbb12de3
-# not generated: 1E2-21F
+01E204609CAC,MEDI_TURRETS,9,5,7,3,3,3,10,24,Salvaged Fleet Mining Unit,A,0,,0,0,,,,R_S_MEDI:0/0|R_MEDI:1/0|R_MEDI:2/0|B_MEDI:0/0|R_BARR:0/5|B_BARR:0/0|R_HANG:1/0|R_S_BARR:0/2|R_END:1/0,0d32ecd249c24746
+01E304609CAC,MEDI_BUGS,9,7,15,1,0,0,26,18,Salvaged Fleet Trade Unit,C,0,,0,1,,,18,R_S_MEDI:2/0|B_BUG_MED:0/0|R_BUG_MEDI:0/3|B_BUG_MED:1/0|R_S_BUG_MEDI:1/0|R_S_BUG_BARR:0/1|R_BUG_BARR:0/2|R_S_BUG_MEDI:1/0|R_END:2/9,3a22f32c425b56e0
+01E404609CAC,CARGO_TURRETS,10,23,9,3,2,4,29,7,Salvaged Hyperdrive Upgrade,C,0,,1,1,1,9,9,R_HANG:1/1|R_CARG:12/0|R_S_BARR:0/1|R_BARR:0/3|B_CARG:0/0|R_S_CARG:5/0|B_CARG:2/0|R_S_CARG:2/0|B_CARG:1/0|R_END:0/4,01b7f5ff7f301a94
+01E504609CAC,CARGO_BUGS,10,22,9,2,1,0,27,38,Salvaged Fleet Beacon,C,0,,3,1,2.5.9,4.16.29,16,R_S_CARG:4/0|B_BUG_CARG:0/0|R_S_BUG_CARG:2/2|R_BUG_CARG:5/0|R_S_BUG_BARR:0/0|R_BUG_CARG:9/5|B_BUG_CARG:0/0|R_BUG_BARR:0/2|B_BUG_CARG:0/0|R_END:2/0,2dca3357aeacae73
+01E604609CAC,CARGO_BUGS,12,29,10,3,3,0,29,36,Salvaged Fleet Trade Unit,C,0,,0,0,,,,R_S_CARG:9/2|B_BUG_CARG:1/0|R_BUG_CARG:4/1|B_BUG_CARG:0/0|R_S_BUG_CARG:6/0|B_BUG_CARG:1/0|R_BUG_BARR:0/5|B_BUG_CARG:1/0|R_BUG_CARG:4/0|B_BUG_CARG:1/0|R_S_BUG_BARR:1/2|R_END:1/0,eea2b47973b752fb
+01E704609CAC,MEDI_TURRETS,10,11,8,2,3,3,25,29,Salvaged Fleet Trade Unit,B,0,,0,0,,,,R_HANG:1/1|R_S_BARR:0/1|B_MEDI:1/0|R_MEDI:4/0|R_BARR:0/6|R_MEDI:1/0|B_MEDI:0/0|R_MEDI:1/0|B_BARR:1/0|R_END:2/0,bd14dbf31ec02945
+01E804609CAC,MEDI_BUGS,10,2,5,4,3,0,25,11,Salvaged Fleet Trade Unit,B,0,,0,0,,,,R_S_MEDI:0/0|B_BUG_BARR:0/0|R_BUG_MEDI:0/0|R_S_BUG_BARR:0/1|R_BUG_BARR:1/3|R_BUG_MEDI:0/1|B_BUG_BARR:0/0|R_BUG_MEDI:0/0|B_BUG_MED:0/0|R_END:1/0,ec074d7f2579bd86
+01E904609CAC,MEDI_TURRETS,8,10,11,4,3,3,15,29,Salvaged Fleet Trade Unit,A,0,,1,0,1,10,,R_S_BARR:0/2|R_S_MEDI:1/1|R_MEDI:3/0|B_MEDI:1/0|R_BARR:1/6|R_MEDI:3/1|R_HANG:0/0|R_END:1/1,c394901e665140e2
+01EA04609CAC,MEDI_BUGS,11,9,5,2,1,0,21,12,Salvaged Fleet Trade Unit,C,0,,1,0,9,5,,R_S_MEDI:3/1|B_BUG_MED:0/0|R_S_BUG_MEDI:0/0|R_S_BUG_BARR:2/0|B_BUG_MED:1/0|R_BUG_BARR:0/2|B_BUG_BARR:1/0|R_S_BUG_MEDI:0/0|B_BUG_BARR:1/0|R_BUG_MEDI:1/2|R_END:0/0,42368289b7d115d7
+01EB04609CAC,CARGO_MAZE,7,15,19,1,0,0,21,21,Salvaged Fleet Beacon,C,0,,3,1,0.2.4,14.24.29,14,R_S_CARG:6/0|R_S_CARG:3/2|R_CARG:4/2|R_S_BARR:0/2|R_BARR:1/9|R_S_BARR:0/4|R_END:1/0,ed2e7c4e4c9891ee
+# not generated: 1EC-21F
