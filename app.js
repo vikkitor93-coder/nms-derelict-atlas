@@ -124,7 +124,7 @@ function mapChips(m) {
 // saved layout and are listed in the Columns panel; add them to DEFAULT_COLUMN_LAYOUT.order to place them in the default.
 const COLUMNS = [
   { key: "glyphs", label: "Glyph code", cell: (r) => `${glyphHtml(r.address)}${mapChips(r.map)}${r.existence === "purple" ? ` <span class="chip purple">purple</span>` : ""}` },
-  { key: "system_name", label: "System name", title: "Computed from the address (port of nms_namegen), unverified: players can rename systems.", cell: (r) => esc(r.system_name || "") },
+  { key: "system_name", label: "System name", title: "Computed from the address (port of nms_namegen); a 20-system sample matched NMS Almanac. Players can rename systems.", cell: (r) => esc(r.system_name || "") },
   { key: "region", label: "Region", cls: "mono muted", cell: (r) => esc(r.region) },
   { key: "preset", label: "Preset", cell: (r) => `<span class="chip ${esc(r.preset.split("_")[0])}">${esc(r.preset)}</span>` },
   { key: "rooms", label: "Rooms", num: true, cell: (r) => r.rooms },
@@ -238,7 +238,7 @@ async function fetchGzipText(url) {
   return new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"))).text();
 }
 
-// System names: computed here from the address (names.js + names-data.json.gz, a port of hadsh/nms_namegen). Unverified.
+// System names: computed here from the address (names.js + names-data.json.gz, a port of hadsh/nms_namegen). Checked on a sample against NMS Almanac.
 let namesReady = null;
 function loadNames() {
   if (!namesReady) namesReady = (async () => {
@@ -254,7 +254,7 @@ function loadNames() {
 }
 const sysName = (address) => (window.NMSNames && NMSNames.ready() ? NMSNames.name(address) : "");
 const nameHtml = (address) => { const n = sysName(address); document.title = n ? `${n} - Derelict Viewer` : "Derelict Viewer";
-  return n ? `<h1 class="sys-name">${esc(n)} <span class="chip" title="Computed from the address by a port of nms_namegen. 6 of 7 names seen in game matched. Players can rename systems.">unverified</span></h1>` : ""; };
+  return n ? `<h1 class="sys-name">${esc(n)} <span class="chip" title="Computed from the address by a port of nms_namegen. Checked against NMS Almanac on a 20-system sample (20/20 after one correction). Players can rename systems.">name checked</span></h1>` : ""; };
 
 // atlas CSV (region file or combined list) -> the same row shape as the local summaries.
 // glyphs P SSS YY ZZZ XXX -> address 000 SSS GG YY ZZZ XXX; region = YY ZZZ XXX
@@ -673,6 +673,16 @@ async function sweepView(params) {
 
 const { cellKey } = DerelictModel;
 let bundleCache = null;  // views/top100.json.gz: {v, t: piece table, s: {ADDRESS16: view}}, fetched once per visit
+const shardCache = new Map();
+// views/ondemand/<REGION>.json.gz (REGION = the last 8 hex digits of the address): maps visitors requested. -> shard or null
+function ondemandShard(address) {
+  const region = address.slice(8);
+  if (!shardCache.has(region)) {
+    shardCache.set(region, fetchGzipText(ATLAS_RAW + `views/ondemand/${region}.json.gz`).then((t) => (t ? JSON.parse(t) : null)).catch(() => null));
+  }
+  return shardCache.get(region).then((sh) => (sh && sh.v === 4 && sh.s && sh.s[address] ? sh : null));
+}
+
 async function atlasBundle() {
   if (!bundleCache) {
     bundleCache = fetchGzipText(ATLAS_RAW + "views/top100.json.gz").then((text) => (text ? JSON.parse(text) : null))
@@ -707,7 +717,20 @@ async function loadDerelict(address) {
     }
   }
   const bundle = await atlasBundle();
-  if (!bundle || !bundle.s[address]) return null;
+  if (!bundle || !bundle.s[address]) {
+    // not in the published top lists: a map made by the on-demand map server earlier in this visit (ondemand.js)
+    const od = typeof OnDemand !== "undefined" ? OnDemand.cached(address) : null;
+    if (!od) {
+      // a map that an earlier visitor requested is published in the region's file views/ondemand/<REGION>.json.gz (same compact v4 as the
+      // top-100 bundle; tools/publish_ondemand_maps.py): draw it from there, "Generate map" is then not offered
+      const shard = await ondemandShard(address);
+      if (!shard) return null;
+      const us = DerelictModel.unpack(DerelictCompact.expand(shard.s[address], shard.t), DerelictCompact.table3(shard.t));
+      return { m: DerelictModel.build(us.d, us.index, props), local: null, onDemand: shard.m[address], requested: true };
+    }
+    const u = OnDemand.unpack(address, od);
+    return { m: DerelictModel.build(u.d, u.index, props), local: null, onDemand: od.m, requested: true };
+  }
   const u = DerelictModel.unpack(bundle.s[address], bundle.t);
   return { m: DerelictModel.build(u.d, u.index, props), local: null };
 }
@@ -787,7 +810,8 @@ async function atlasOnlyView(address) {
       ${rooms.map((r) => `<tr><td class="num">${r.k}</td><td><span class="dot" style="background:${r.info.color}"></span> ${esc(r.info.label)}</td>
         <td class="num">${r.c}</td><td class="num">${r.l}</td></tr>`).join("")}</tbody></table></div>` : `<p>This system is not in the atlas.</p>`}
     ${HAS_SERVER ? `<p>Floor maps and the 3D view need the full layout: <button id="go">Generate now</button> <span id="go-status" class="muted"></span></p>`
-      : `<p class="note">Full maps and the 3D view are published for two lists of 100 systems (top by crates, top by frigate modules) (tick <b>Has map</b> in the table; the top 100 by crates and the top 100 by frigate modules). Other systems show their room counts here.</p>`}`;
+      : `<p class="note">Full maps and the 3D view are published for two lists of 100 systems (top by crates, top by frigate modules) (tick <b>Has map</b> in the table; the top 100 by crates and the top 100 by frigate modules). Other systems show their room counts here.</p>
+        ${typeof OnDemand !== "undefined" && OnDemand.available() ? `<div class="od-box"><button id="od-go">Generate map</button> <div id="od-status" class="od-status muted">Asks the map server for this system's map. Usually a few seconds; some systems take over a minute.</div></div>` : ""}`}`;
   fillReward(address);
   wireDone(address);
   if (shareCtx) DvShare.wire(shareCtx);
@@ -801,6 +825,70 @@ async function atlasOnlyView(address) {
   }
   const go = document.getElementById("go");
   if (go) go.onclick = () => generate(address, false, 0, document.getElementById("go-status"), go);
+  const odGo = document.getElementById("od-go");
+  if (odGo) wireOnDemand(address, odGo, document.getElementById("od-status"));
+}
+
+// "Generate map" on the public site: asks the on-demand map server (DV_CONFIG.ondemandBase, ondemand/ondemand_server.py),
+// shows what is happening (preset, queue position "N of M", stage, a progress bar that never reaches 100% early, a pulse that
+// shows work is going on, "taking longer than usual" when the ETA has passed), then draws the result with the same renderer
+// as the top-100 maps (loadDerelict). The wording comes from the server (ondemand/eta_config.json); OnDemand.view() decides
+// what to show. aria-live text changes only when something meaningful changes, not every second.
+function wireOnDemand(address, btn, status) {
+  btn.onclick = async () => {
+    btn.disabled = true;
+    const ctl = new AbortController();
+    let timer = 0;
+    const stop = () => { ctl.abort(); clearInterval(timer); };
+    window.addEventListener("hashchange", stop, { once: true });   // left the page: stop asking
+    status.className = "od-status";
+    status.innerHTML = `<div class="od-line"><span class="od-pulse" aria-hidden="true"></span><strong class="od-title"></strong></div>
+      <div class="od-kind muted"></div><div class="od-queue"></div>
+      <div class="od-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Map progress"><div class="od-fill"></div></div>
+      <div class="od-time muted" aria-hidden="true"></div><div class="od-busy muted"></div><ol class="od-stages muted"></ol>
+      <div class="od-live sr-only" role="status" aria-live="polite"></div>`;
+    const q = (sel) => status.querySelector(sel);
+    const el = { title: q(".od-title"), kind: q(".od-kind"), queue: q(".od-queue"), bar: q(".od-bar"), fill: q(".od-fill"),
+      time: q(".od-time"), busy: q(".od-busy"), stages: q(".od-stages"), live: q(".od-live"), line: q(".od-line") };
+    const run = { st: null, t0: Date.now(), pct: 0 };
+    let lastLive = "", lastStages = "";
+    const paint = () => {
+      const v = OnDemand.view(run, Date.now());
+      run.pct = v.pct;
+      el.title.textContent = v.title;
+      el.kind.textContent = [v.kind, v.rooms].filter(Boolean).join(" · ");
+      el.queue.textContent = v.queue;
+      el.fill.style.width = v.pct + "%";
+      el.bar.setAttribute("aria-valuenow", String(v.pct));
+      el.bar.className = "od-bar" + (v.over ? " od-over" : "");
+      el.time.textContent = [v.time, v.over ? "" : v.pct ? v.pct + "%" : ""].filter(Boolean).join(" · ");
+      el.busy.textContent = v.busy;
+      const sig = v.stages.join("|") + "#" + v.stage;
+      if (sig !== lastStages) {
+        lastStages = sig;
+        el.stages.innerHTML = v.stages.map((t, k) => `<li class="${k < v.stage ? "od-done" : k === v.stage ? "od-now" : ""}">${esc(t)}</li>`).join("");
+      }
+      if (v.live !== lastLive) { lastLive = v.live; el.live.textContent = v.live; }
+    };
+    const onStatus = (s) => { run.st = s; paint(); };
+    timer = setInterval(() => { if (run.st) paint(); }, 500);
+    try {
+      await OnDemand.request(address, { onStatus, signal: ctl.signal });
+      clearInterval(timer);
+      if (location.hash !== `#/d/${address}`) return;
+      el.time.textContent = "Map ready, drawing…";
+      el.live.textContent = "Map ready, drawing the map";
+      await derelictView(address);
+    } catch (err) {
+      clearInterval(timer);
+      if (err && err.code === "aborted") return;
+      status.className = "od-status muted";
+      status.textContent = OnDemand.message(err);
+      status.setAttribute("role", "alert");
+      btn.disabled = false;
+      btn.textContent = "Try again";
+    }
+  };
 }
 
 async function derelictView(address) {
@@ -827,6 +915,7 @@ async function derelictView(address) {
   const byIndex = M.byIndex, containers = M.containers, doors = M.doors, links = M.links;
   let moduleRow = null;
   try { moduleRow = await atlasSystem(address); } catch (_) { /* local maps still work without the published index */ }
+  if (!moduleRow && got.onDemand && got.onDemand.modules != null) moduleRow = { frigate_modules: got.onDemand.modules, frigate_modules_ambiguous: got.onDemand.modules_ambiguous ? 1 : 0, map: 0 };
   const moduleIds = new Set((moduleRow?.frigate_module_ids || "").split(".").filter(Boolean).map(Number));
   const possibleModuleIds = new Set((moduleRow?.frigate_module_alt_ids || "").split(".").filter(Boolean).map(Number));
   let outside = 0;
@@ -882,6 +971,7 @@ async function derelictView(address) {
       <span class="muted mono">address ${esc(d.address)} · seed ${esc(d.seed)}</span>
       ${doneBoxHtml(d.address)}</div>
     ${DvShare.html(shareCtx)}
+    ${got.requested ? `<p class="note"><span class="chip" title="A visitor asked the map server for this system; the map was generated and published.">Requested map</span> Made on request by the map server; it is not one of the top lists.</p>` : ""}
     <div class="total-bar">${totalGroupsHtml("d", totalGroups())}</div>
     <div class="cards">
       ${card(d.room_count, "Rooms")}${card(levels.length, "Floors")}${card(crates, "Salvage crates")}

@@ -158,6 +158,9 @@
     return name;
   }
 
+  // Corrections confirmed by NMS Almanac and an own in-game capture (upstream data differs): address16 -> name.
+  var OVERRIDES = { "0000760006606CAB": "Irchol-Luhimo XVII" };
+
   function name(address, galaxy) {
     var a = String(address).replace(/[\s:]/g, "").toUpperCase();
     var sys, coords, g;
@@ -169,9 +172,11 @@
       g = Number(galaxy) & 0xFF; sys = parseInt(a.substr(1, 3), 16); coords = parseInt(a.substr(4, 8), 16) >>> 0;
     } else return "";
     if (!ALPHA) return "";
+    var key = "000" + ("00" + sys.toString(16)).slice(-3).toUpperCase() + ("0" + g.toString(16)).slice(-2).toUpperCase() + ("0000000" + coords.toString(16)).slice(-8).toUpperCase();
+    if (OVERRIDES[key]) return OVERRIDES[key];
     return systemName(coords, sys, g);
   }
 
-  var api = { init: init, name: name, ready: function () { return !!ALPHA; }, status: "unverified" };
+  var api = { init: init, name: name, ready: function () { return !!ALPHA; }, status: "checked" };
   if (typeof module !== "undefined" && module.exports) module.exports = api; else root.NMSNames = api;
 })(typeof self !== "undefined" ? self : this);

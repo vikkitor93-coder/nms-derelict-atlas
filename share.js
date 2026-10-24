@@ -51,7 +51,7 @@ window.DvShare = (function () {
 
   function shareText(ctx) {
     const c = ctx.counts;
-    return `Derelict ${ctx.glyphs}${ctx.name ? ` (${ctx.name}, unverified name)` : ""}: ${c.preset}, ${c.crates} crates, ${c.footlockers} footlockers${c.modules != null ? `, ${c.modules} frigate modules` : ""}, ${c.rooms} rooms`;
+    return `Derelict ${ctx.glyphs}${ctx.name ? ` (${ctx.name})` : ""}: ${c.preset}, ${c.crates} crates, ${c.footlockers} footlockers${c.modules != null ? `, ${c.modules} frigate modules` : ""}, ${c.rooms} rooms`;
   }
 
   function wire(ctx) {
