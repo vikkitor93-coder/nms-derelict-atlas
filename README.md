@@ -41,6 +41,29 @@ replace the file with the complete region when it's done.
 Both files are rebuilt and committed together with every region upload. They're deterministic, so an unchanged
 file isn't rewritten.
 
+## Maps for two top lists
+
+The `map` column of `index/systems.csv.gz` is 0 (no map), 1 (top 100 by crates + footlockers), 2 (top 100 by predicted
+frigate modules, ties by the same crate rank) or 3 (in both lists). `views/top100.json.gz` holds the full map of every
+system with `map` > 0, each stored once, plus `k` (the same 1/2/3 mark per system). The file name is kept for
+compatibility. `s/<ADDRESS16>.html` + `.png` are link-preview cards for those systems (tools/build_share_cards.py).
+
+## Viewer site
+
+The viewer is also published from the repo root (GitHub Pages: `index.html`, `app.js`, ...). It is a private test
+site behind a soft password gate (`config.js`, `gate` flag) and not indexed (`robots.txt`). It uses only lookalike
+glyph drawings (`glyphs-svg/`), no game assets.
+
+## Credits
+
+- **NMS-Shipwright** by Shikhar Tiwari (https://github.com/S-T-0-7/NMS-Shipwright, MIT). Its Unicorn emulation
+  harness (`emu.py`) is the base of this project's generator emulation, which produces the layouts in this atlas.
+- **three.js** (MIT) draws the 3D view on the site.
+- *(system names: nms_namegen, hadsh/nms_namegen, MIT, original by Stuart Coyle with GoodGuysFree, to be added by the
+  agent that adds the name column.)*
+
+This is an unofficial fan project. Not affiliated with Hello Games. No Man's Sky is a trademark of Hello Games Ltd.
+
 ## Authenticity
 
 Everything in `regions/` is verified. Each file's `# inputs` header is a SHA-256 over the format, the
