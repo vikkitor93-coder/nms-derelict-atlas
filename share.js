@@ -9,12 +9,34 @@ window.DvShare = (function () {
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const MAP_NAMES = { 1: "Top 100 by crates", 2: "Top 100 by frigate modules", 3: "Top 100 by crates and by frigate modules" };
 
+  // "Open in..." plain text links to outside sites. One entry per site; add more here. {glyphs} = 12 hex digits, {galaxy} = 0-based
+  // galaxy index, {slug} = galaxy slug (an entry with `slugs` is hidden for galaxies not listed, never guessed). No fetching, no logos.
+  // Galaxy numbering differs per site, keep them apart: Almanac WEBSITE = slug (euclid); NMS Hub map = 0-based index (Euclid 0, {galaxy});
+  // the Almanac API (1-256, Euclid = 1) is not used: this page makes no API calls and fetches nothing from these sites.
+  const EXTERNAL = [
+    { name: "NMS Almanac", url: "https://nmsalmanac.com/system/{slug}/{glyphs}", slugs: { 0: "euclid" } },
+    { name: "NMS Hub galactic map", url: "https://map.nomansskyhub.app/?arrival=1&addr={glyphs}&galaxy={galaxy}" },
+  ];
+  function externalLinks(address) {
+    const glyphs = "0" + address.slice(3, 6) + address.slice(8), galaxy = parseInt(address.slice(6, 8), 16);
+    return EXTERNAL.filter((e) => !e.slugs || e.slugs[galaxy]).map((e) => ({
+      name: e.name, url: e.url.replace("{glyphs}", glyphs).replace("{galaxy}", galaxy).replace("{slug}", (e.slugs || {})[galaxy] || "") }));
+  }
+  function openInHtml(address) {
+    const links = externalLinks(address);
+    if (!links.length) return "";
+    return `<details class="open-in"><summary>Open in…</summary>${links.map((l) =>
+      `<a href="${esc(l.url)}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">${esc(l.name)}</a>`).join("")}
+      <span class="muted">External sites, not affiliated.</span></details>`;
+  }
+
   function html(ctx) {
     return `<div class="share-bar" role="group" aria-label="Share">
       <button type="button" id="sh-copy" title="Copy the link to this system (${esc(directUrl(ctx.address))})">Copy link</button>
       <button type="button" id="sh-share" title="Share this system${ctx.map ? " (link with a preview card)" : ""}">Share</button>
       <button type="button" id="sh-img" title="Save a PNG of this system to keep or send">Save image</button>
       <select id="sh-what" title="What the image shows"><option value="map">Floor maps</option>${ctx.getView3d ? `<option value="3d">3D view</option>` : ""}<option value="none">Counts only</option></select>
+      ${openInHtml(ctx.address)}
       <span id="sh-note" class="muted" aria-live="polite"></span></div>`;
   }
 
@@ -142,5 +164,5 @@ window.DvShare = (function () {
     return `Saved ${name} (${Math.round(blob.size / 1024)} KB)`;
   }
 
-  return { html, wire, directUrl, cardUrl, MAP_NAMES };
+  return { html, wire, directUrl, cardUrl, MAP_NAMES, externalLinks, EXTERNAL };
 })();

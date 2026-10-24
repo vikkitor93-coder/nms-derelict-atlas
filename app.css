@@ -269,3 +269,5 @@ html.gated main, html.gated .top, html.gated .foot { display: none; }
 #gate { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: var(--bg); z-index: 50; padding: 16px; }
 #gate form { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 24px; width: min(360px, 100%); display: flex; flex-direction: column; gap: 10px; }
 #gate h1 { margin: 0; }
+.open-in { display: inline-flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; background: var(--panel-2); border: 1px solid var(--line); border-radius: 6px; padding: 5px 9px; }
+.open-in summary { cursor: pointer; }

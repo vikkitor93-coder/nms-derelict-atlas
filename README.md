@@ -62,6 +62,9 @@ glyph drawings (`glyphs-svg/`), no game assets.
 - *(system names: nms_namegen, hadsh/nms_namegen, MIT, original by Stuart Coyle with GoodGuysFree, to be added by the
   agent that adds the name column.)*
 
+Links to (external, not affiliated; no data is taken from them): NMS Almanac (https://nmsalmanac.com) and the NMS Hub
+galactic map (https://map.nomansskyhub.app, by elegra1965).
+
 This is an unofficial fan project. Not affiliated with Hello Games. No Man's Sky is a trademark of Hello Games Ltd.
 
 ## Authenticity

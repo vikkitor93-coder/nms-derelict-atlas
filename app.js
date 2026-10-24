@@ -1284,7 +1284,9 @@ function aboutView() {
     <p>Predicted derelict-freighter layouts for No Man's Sky 7.05 (Euclid galaxy), generated offline by running the game's own layout code.
       The data is the public atlas <a href="https://github.com/${ATLAS.repo}" target="_blank" rel="noopener">${ATLAS.repo}</a>.</p>
     <h2 id="credits">Credits</h2><ul class="credits">${credits}</ul>
-    <p class="note">${esc(window.DV_DISCLAIMER || "Unofficial fan project. Not affiliated with Hello Games.")}</p>`;
+    <h3>Links to</h3><ul class="credits">${(window.DV_LINKS_TO || []).map((c) => `<li><a href="${esc(c.url)}" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">${esc(c.name)}</a>
+      by ${esc(c.by)} <span class="muted">(${esc(c.note)}; external, not affiliated)</span></li>`).join("")}</ul>
+        <p class="note">${esc(window.DV_DISCLAIMER || "Unofficial fan project. Not affiliated with Hello Games.")}</p>`;
 }
 
 let ROUTE_READY = false;   // set once the server probe and the password gate (if any) are done

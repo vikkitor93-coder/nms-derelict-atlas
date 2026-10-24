@@ -7,4 +7,9 @@ window.DV_CREDITS = [
   { name: "three.js", by: "mrdoob and contributors", url: "https://threejs.org/", license: "MIT",
     what: "Draws the interactive 3D view (vendor/three, with its licence file)." },
 ];
+// Sites this one links to (no data is taken from them, no API calls): shown under "Links to" on the About page.
+window.DV_LINKS_TO = [
+  { name: "NMS Almanac", url: "https://nmsalmanac.com", by: "NMS Almanac", note: "system pages (nmsalmanac.com)" },
+  { name: "NMS Hub galactic map", url: "https://map.nomansskyhub.app/", by: "elegra1965", note: "galactic map (map.nomansskyhub.app)" },
+];
 window.DV_DISCLAIMER = "Unofficial fan project. Not affiliated with Hello Games. No Man's Sky is a trademark of Hello Games Ltd. No game assets are published here; portal glyphs on the public site are lookalike drawings.";
