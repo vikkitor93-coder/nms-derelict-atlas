@@ -124,6 +124,7 @@ function mapChips(m) {
 // saved layout and are listed in the Columns panel; add them to DEFAULT_COLUMN_LAYOUT.order to place them in the default.
 const COLUMNS = [
   { key: "glyphs", label: "Glyph code", cell: (r) => `${glyphHtml(r.address)}${mapChips(r.map)}${r.existence === "purple" ? ` <span class="chip purple">purple</span>` : ""}` },
+  { key: "system_name", label: "System name", title: "Computed from the address (port of nms_namegen), unverified: players can rename systems.", cell: (r) => esc(r.system_name || "") },
   { key: "region", label: "Region", cls: "mono muted", cell: (r) => esc(r.region) },
   { key: "preset", label: "Preset", cell: (r) => `<span class="chip ${esc(r.preset.split("_")[0])}">${esc(r.preset)}</span>` },
   { key: "rooms", label: "Rooms", num: true, cell: (r) => r.rooms },
@@ -177,7 +178,7 @@ function wireTotalGroups(prefix, g, onChange) {
 }
 // The default column layout (what "Reset columns" restores): order = every column key, hidden = keys not shown.
 // To lock in a layout the user sent via "Copy column layout", paste their JSON over this value.
-const DEFAULT_COLUMN_LAYOUT = {"order":["glyphs","total","salvage_crates","footlockers","briefcases","tall_lockers","rooms","floors","stair_pieces","hangar","region","preset","reward","frigate_modules"],"hidden":[]};
+const DEFAULT_COLUMN_LAYOUT = {"order":["glyphs","system_name","total","salvage_crates","footlockers","briefcases","tall_lockers","rooms","floors","stair_pieces","hangar","region","preset","reward","frigate_modules"],"hidden":[]};
 // Layout version: a browser that still has the OLD default saved (never customised) is reset once to the current default.
 const COLUMN_LAYOUT_VERSION = 2;
 const OLD_DEFAULT_COLUMNS = '{"order":["glyphs","region","preset","rooms","floors","stair_pieces","hangar","salvage_crates","footlockers","total","briefcases","tall_lockers"],"hidden":[]}';
@@ -236,6 +237,24 @@ async function fetchGzipText(url) {
   if (bytes[0] !== 0x1f || bytes[1] !== 0x8b) return new TextDecoder().decode(bytes);
   return new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"))).text();
 }
+
+// System names: computed here from the address (names.js + names-data.json.gz, a port of hadsh/nms_namegen). Unverified.
+let namesReady = null;
+function loadNames() {
+  if (!namesReady) namesReady = (async () => {
+    try {
+      if (!window.NMSNames) return false;
+      const t = await fetchGzipText(new URL("names-data.json.gz", document.baseURI).href);
+      if (!t) return false;
+      NMSNames.init(JSON.parse(t));
+      return true;
+    } catch { return false; }
+  })();
+  return namesReady;
+}
+const sysName = (address) => (window.NMSNames && NMSNames.ready() ? NMSNames.name(address) : "");
+const nameHtml = (address) => { const n = sysName(address); document.title = n ? `${n} - Derelict Viewer` : "Derelict Viewer";
+  return n ? `<h1 class="sys-name">${esc(n)} <span class="chip" title="Computed from the address by a port of nms_namegen. 6 of 7 names seen in game matched. Players can rename systems.">unverified</span></h1>` : ""; };
 
 // atlas CSV (region file or combined list) -> the same row shape as the local summaries.
 // glyphs P SSS YY ZZZ XXX -> address 000 SSS GG YY ZZZ XXX; region = YY ZZZ XXX
@@ -327,6 +346,7 @@ async function sweepView(params) {
     reward: REWARD_RANK[r.reward_class] ?? null,  // sort value of the Reward column; total, totalText: set in render() from the "Total counts" groups
     hangar: (r.hangar_pieces || 0) > 0 || /\bR_HANG\b/.test(r.templates || ""),
   }));
+  if (await loadNames()) for (const r of rows) r.system_name = NMSNames.name(r.address);
   const regionKeys = [...new Set(rows.map((r) => r.region))].sort();
   const presets = [...new Set(rows.map((r) => r.preset))].sort();
   const f = Object.assign({ region: "", preset: "", maxRooms: "", maxFloors: "", noStairs: false, noHangar: false, hasMap: false, mapList: "", hideDone: false, minCrates: "", minTotal: "", minBriefcases: "", minTallLockers: "", minFrigateModules: "", q: "",
@@ -364,7 +384,7 @@ async function sweepView(params) {
       <label title="Systems whose briefcase count is not known yet are left out">Min briefcases <input id="f-minBriefcases" type="number" min="0"></label>
       <label title="Systems whose tall locker count is not known yet are left out">Min tall lockers <input id="f-minTallLockers" type="number" min="0"></label>
       <label title="Systems without a computed prediction are left out">Min frigate modules <input id="f-minFrigateModules" type="number" min="0"></label>
-      <label>Search <input id="f-q" placeholder="glyphs / template" style="width:150px"></label>
+      <label>Search <input id="f-q" placeholder="glyphs / name / template" style="width:150px"></label>
       <button id="f-reset" type="button">Reset</button>
       <button id="col-toggle" type="button" aria-expanded="false" aria-controls="col-panel">Columns</button>
     </div>
@@ -609,7 +629,7 @@ async function sweepView(params) {
       (num(f.minBriefcases) === null || (r.briefcases !== null && r.briefcases >= num(f.minBriefcases))) &&
       (num(f.minTallLockers) === null || (r.tall_lockers !== null && r.tall_lockers >= num(f.minTallLockers))) &&
       (num(f.minFrigateModules) === null || (r.frigate_modules !== null && r.frigate_modules >= num(f.minFrigateModules))) &&
-      (!q || r.glyphs.includes(q) || r.address.includes(q) || (r.templates || "").includes(q)));
+      (!q || r.glyphs.includes(q) || r.address.includes(q) || (r.templates || "").includes(q) || (r.system_name || "").toUpperCase().includes(q)));
     const dir = f.asc ? 1 : -1;
     shown.sort((a, b) => {
       if (picking && (a.rwMatch > 0 || b.rwMatch > 0)) {  // matching systems first, best class first
@@ -746,10 +766,12 @@ async function atlasOnlyView(address) {
   let kind = row ? row.map : 0;
   try { const b = await atlasBundle(); if (b && b.k && b.k[address]) kind = b.k[address]; } catch { /* offline */ }
   if (row) row.map = kind;
-  const shareCtx = row ? { address, glyphs: glyphsOf(address), pretty: glyphsPretty(address), map: row.map, mapName: MAP_LIST_NAMES[row.map] || "", getView3d: null,
+  await loadNames();
+  const shareCtx = row ? { address, name: sysName(address), glyphs: glyphsOf(address), pretty: glyphsPretty(address), map: row.map, mapName: MAP_LIST_NAMES[row.map] || "", getView3d: null,
     counts: { preset: row.preset, crates: row.salvage_crates, footlockers: row.footlockers, modules: row.frigate_modules, rooms: row.rooms, floors: row.floors, briefcases: row.briefcases } } : null;
   if (shareCtx) shareCtx.getView3d = null;
   app.innerHTML = `<p><a href="#/">← Atlas</a></p>
+    ${nameHtml(address)}
     <div class="head">${glyphHtml(address, true)}${glyphMode() === "hex" ? "" : ` <span class="mono">${esc(glyphsPretty(address))}</span>`}
       ${row ? `<span class="chip ${esc(row.preset.split("_")[0])}">${esc(row.preset)}</span>` : ""}${row ? mapChips(row.map) : ""}${doneBoxHtml(address)}</div>
     ${shareCtx ? DvShare.html(shareCtx) : ""}
@@ -848,11 +870,13 @@ async function derelictView(address) {
   let view3d = null;
   let mapKind = moduleRow ? moduleRow.map : 0;   // region files have no map column: the bundle's "k" says which top lists a system is in
   try { const b = await atlasBundle(); if (b && b.k && b.k[address]) mapKind = b.k[address]; } catch { /* offline */ }
-  const shareCtx = { address: d.address, glyphs: glyphsOf(d.address), pretty: glyphsPretty(d.address), map: mapKind, mapName: MAP_LIST_NAMES[mapKind] || "",
+  await loadNames();
+  const shareCtx = { address: d.address, name: sysName(d.address), glyphs: glyphsOf(d.address), pretty: glyphsPretty(d.address), map: mapKind, mapName: MAP_LIST_NAMES[mapKind] || "",
     getView3d: () => view3d,
     counts: { preset: d.preset, crates, footlockers: lockers, modules: moduleRow ? moduleRow.frigate_modules : null, rooms: d.room_count, floors: levels.length, briefcases: extras ? briefcases : null } };
   app.innerHTML = `
     <p><a href="#/">← Atlas</a></p>
+    ${nameHtml(d.address)}
     <div class="head">${glyphHtml(d.address, true)}${glyphMode() === "hex" ? "" : ` <span class="mono">${esc(glyphsPretty(d.address))}</span>`}
       <span class="chip ${esc(d.preset.split("_")[0])}">${esc(d.preset)}</span>${mapChips(mapKind)}
       <span class="muted mono">address ${esc(d.address)} · seed ${esc(d.seed)}</span>
@@ -1295,6 +1319,7 @@ function route() {
   hideTip();
   if (viewCleanup) { viewCleanup(); viewCleanup = null; }
   const h = location.hash.slice(1) || "/";
+  document.title = "Derelict Viewer";
   if (h === "/about") return aboutView();
   const m = h.match(/^\/d\/([0-9A-Fa-f]{16})$/);
   if (m) return derelictView(m[1].toUpperCase());

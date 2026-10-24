@@ -3,7 +3,8 @@
 window.DV_CREDITS = [
   { name: "NMS-Shipwright", by: "Shikhar Tiwari", url: "https://github.com/S-T-0-7/NMS-Shipwright", license: "MIT",
     what: "Its Unicorn emulation harness (emu.py) is the base of this project's generator emulation: the derelict layouts here are produced by running the game's own layout code through it." },
-  // second entry (another agent adds it): nms_namegen (hadsh/nms_namegen, MIT; original by Stuart Coyle, co-authored with GoodGuysFree), real system names.
+  { name: "nms_namegen", by: "hadsh (original by Stuart Coyle, co-authored with GoodGuysFree)", url: "https://github.com/hadsh/nms_namegen", license: "MIT",
+    what: "The system-name generator: names.js is a JavaScript port of its naming part, with its data (names-data.json.gz). Names are computed in your browser from the address and are unverified (6 of 7 names seen in game matched)." },
   { name: "three.js", by: "mrdoob and contributors", url: "https://threejs.org/", license: "MIT",
     what: "Draws the interactive 3D view (vendor/three, with its licence file)." },
 ];

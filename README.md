@@ -59,8 +59,9 @@ glyph drawings (`glyphs-svg/`), no game assets.
 - **NMS-Shipwright** by Shikhar Tiwari (https://github.com/S-T-0-7/NMS-Shipwright, MIT). Its Unicorn emulation
   harness (`emu.py`) is the base of this project's generator emulation, which produces the layouts in this atlas.
 - **three.js** (MIT) draws the 3D view on the site.
-- *(system names: nms_namegen, hadsh/nms_namegen, MIT, original by Stuart Coyle with GoodGuysFree, to be added by the
-  agent that adds the name column.)*
+- **nms_namegen** by hadsh (https://github.com/hadsh/nms_namegen, MIT; original by Stuart Coyle, co-authored with
+  GoodGuysFree). The viewer's system names come from a JavaScript port of its naming part (`names.js`, with its data in
+  `names-data.json.gz`). Names are computed in the browser from the address, are not stored in the atlas, and are unverified.
 
 Links to (external, not affiliated; no data is taken from them): NMS Almanac (https://nmsalmanac.com) and the NMS Hub
 galactic map (https://map.nomansskyhub.app, by elegra1965).
